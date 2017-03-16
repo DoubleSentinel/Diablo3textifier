@@ -5,7 +5,11 @@ from urllib import request
 
 
 def download_icon(link, directory, sex, character):
-    urllib.request.urlretrieve(link, directory + link.replace('demonhunter_male', character + '_' + sex).split('/')[-1])
+    try:
+        urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + link.replace('demonhunter_male', character + '_' + sex).split('/')[-1])
+	    print(link.replace('demonhunter_male', character + '_' + sex).split('/')[-1])
+    except:
+	    pass
 
 
 def get_links(source, item, download=False):
@@ -21,7 +25,7 @@ def get_links(source, item, download=False):
                 download_icon(link, directory, 'male', character)
                 download_icon(link, directory, 'female', character)
         else:
-            print(link.replace('demonhunter_male', 'demonhunter_female'))
+            print(link)
 
 
 if __name__ == '__main__':
@@ -70,9 +74,4 @@ if __name__ == '__main__':
              ]
     for item in items:
         for i in range(1, 6):
-            try:
-                get_links(urllib.request.urlopen(
-                    'https://us.battle.net/d3/en/item/' + item + '/#type=legendary&page=' + str(i)).read().decode(
-                    'utf-8'), item, True)
-            except:
-                pass
+            get_links(urllib.request.urlopen('https://us.battle.net/d3/en/item/' + item + '/#type=legendary&page=' + str(i)).read().decode('utf-8'), item, True)

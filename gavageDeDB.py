@@ -5,11 +5,22 @@ from urllib import request
 
 
 def download_icon(link, directory, sex, character):
-    try:
-        urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + link.replace('demonhunter_male', character + '_' + sex).split('/')[-1])
-	    print(link.replace('demonhunter_male', character + '_' + sex).split('/')[-1])
-    except:
-	    pass
+    filename = link.replace('demonhunter_male', character + '_' + sex).split('/')[-1]
+    print('checking: ' + filename)
+    if os.path.isfile(directory + filename):
+        print('\tfile exists, skipping')
+        return
+    else:
+        try:
+            print('downloading...')
+            urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + filename)
+            print(filename + ' downloaded!')
+        except urllib.error.URLError:
+            print('remote file doesn\'t exist, skipping')
+            pass
+        except:
+            print('download failed, skipping')
+            pass
 
 
 def get_links(source, item, download=False):
@@ -73,5 +84,6 @@ if __name__ == '__main__':
              'wand'
              ]
     for item in items:
-        for i in range(1, 6):
-            get_links(urllib.request.urlopen('https://us.battle.net/d3/en/item/' + item + '/#type=legendary&page=' + str(i)).read().decode('utf-8'), item, True)
+        get_links(urllib.request.urlopen(
+            'https://us.battle.net/d3/en/item/' + item + '/#type=legendary&').read().decode('utf-8'),
+                  item, True)

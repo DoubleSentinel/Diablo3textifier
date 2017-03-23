@@ -10,17 +10,16 @@ def download_icon(link, directory, sex, character):
     if os.path.isfile(directory + filename):
         print('\tfile exists, skipping')
         return
-    else:
-        try:
-            print('downloading...')
-            urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + filename)
-            print(filename + ' downloaded!')
-        except urllib.error.URLError:
-            print('remote file doesn\'t exist, skipping')
-            pass
-        except:
-            print('download failed, skipping')
-            pass
+    try:
+        print('downloading...')
+        urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + filename)
+        print(filename + ' downloaded!')
+    except urllib.error.URLError:
+        print('remote file doesn\'t exist, skipping')
+        pass
+    except:
+        print('download failed, skipping')
+        pass
 
 
 def get_links(source, item, download=False):

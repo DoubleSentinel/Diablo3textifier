@@ -13,9 +13,10 @@ def split_images(image_paths):
         images.append(cv2.imread(image_paths[i]))
         b, g, r = cv2.split(images[i])
         filepath = image_paths[i].split('\\')
-        cv2.imwrite(filepath[0].replace('sample', 'temp') + '\\' + filepath[1].split('.')[0] + '_b' + '.png', b)
-        cv2.imwrite(filepath[0].replace('sample', 'temp') + '\\' + filepath[1].split('.')[0] + '_g' + '.png', g)
-        cv2.imwrite(filepath[0].replace('sample', 'temp') + '\\' + filepath[1].split('.')[0] + '_r' + '.png', r)
+        filepath = filepath[0].replace('sample', 'temp') + '\\' + filepath[1].split('.')[0]
+        cv2.imwrite(filepath + '_b' + '.png', b)
+        cv2.imwrite(filepath + '_g' + '.png', g)
+        cv2.imwrite(filepath + '_r' + '.png', r)
 
 
 def detect_contours(image_paths):

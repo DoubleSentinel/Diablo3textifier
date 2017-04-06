@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+# Project specific ignores
+database/
+temp/
+
 # C extensions
 *.so
 
@@ -33,9 +38,6 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
-# project specific ignores
-database/
 
 # Unit test / coverage reports
 htmlcov/

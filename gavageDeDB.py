@@ -3,10 +3,11 @@ import urllib
 import os
 from urllib import request
 import sys
+from bs4 import BeautifulSoup
 
 
-def download_item_icon(link, directory, sex, character):
-    filename = link.replace('demonhunter_male', character + '_' + sex).split('/')[-1]
+def download_item_icon(link, directory, sex, character, name):
+    filename = name + '_' + character + '_' + sex + '.png'
     print('checking: ' + filename)
     if os.path.isfile(directory + filename):
         print('\tfile exists, skipping')
@@ -22,9 +23,9 @@ def download_item_icon(link, directory, sex, character):
     except urllib.error.URLError:
         print('remote file doesn\'t exist, skipping')
         pass
-        # except:
-        #     print('download failed, skipping')
-        #     pass
+    except:
+        print('download failed, skipping')
+        pass
 
 
 def download_spell_icon(link, directory):
@@ -42,23 +43,23 @@ def download_spell_icon(link, directory):
             print('remote file doesn\'t exist, skipping')
 
 
-def get_item_links(source, item, download=False):
-    for link in re.findall(
-            '[\bhttps://blzmedia\-a.akamaihd.net/d3/icons/items/large/\b]+[A-Z_\:0-9a-z]*[0-9]{2,50}[A-Z_\:0-9a-z]*.png',
-            source):
+def get_item_links(source, item, rarity, download=False):
+    soup = BeautifulSoup(source, 'html.parser')
+    for tr in soup.find_all('tr', rarity):
+        link = re.findall('url\((.*?)\)', str(tr.find_all('span', style=re.compile("background-image: "))[0]))[0]
+        name = tr.find_all('a')[1].string
+        # print("name: "+name+" download link: "+link)
         if download:
             directory = os.getcwd() + '\\database\\' + item + '\\'
             if not os.path.exists(directory):
                 os.makedirs(directory)
             for character in characters:
-                download_item_icon(link, directory, 'male', character)
-                download_item_icon(link, directory, 'female', character)
-        else:
-            print(link)
+                download_item_icon(link, directory, 'male', character, name)
+                download_item_icon(link, directory, 'female', character, name)
 
 
 def get_class_links(source, character, download=False):
-    for link in re.findall('[\bhttps://blzmedia\-a.akamaihd.net/d3/icons/skills/64/\b]+[a-z_0-9]*_[a-z]*.png',source):
+    for link in re.findall('[\bhttps://blzmedia\-a.akamaihd.net/d3/icons/skills/64/\b]+[a-z_0-9]*_[a-z]*.png', source):
         if download:
             dir = os.getcwd() + '\\database\\characters\\' + character + '-spells\\'
             if not os.path.exists(dir):
@@ -78,9 +79,19 @@ if __name__ == '__main__':
              'mighty-weapon-1h', 'axe-2h', 'mace-2h', 'polearm', 'staff', 'sword-2h', 'daibo', 'flail-2h',
              'mighty-weapon-2h', 'bow', 'crossbow', 'hand-crossbow', 'wand']
     if 'items' in args:
-        for item in items:
-            get_item_links(urllib.request.urlopen(
-                'https://us.battle.net/d3/en/item/' + item).read().decode('utf-8'), item, True)
+        if len(args) == 2:
+            print("Please give one of the following rarities: common, legendary")
+        else:
+            if "common" in args:
+                for item in items:
+                    get_item_links(urllib.request.urlopen(
+                        'https://us.battle.net/d3/en/item/' + item + '/').read().decode('utf-8'), item, "common",
+                                   True)
+            elif "legendary" in args:
+                for item in items:
+                    get_item_links(urllib.request.urlopen(
+                        'https://us.battle.net/d3/en/item/' + item + '/').read().decode('utf-8'), item, "legendary",
+                                   True)
     if 'chars' in args:
         for char in characters:
             dir = os.getcwd() + '\\database\\characters\\'
@@ -101,4 +112,4 @@ if __name__ == '__main__':
             get_class_links(urllib.request.urlopen(
                 'https://us.battle.net/d3/en/class/' + char + '/passive/').read().decode('utf-8'), char, True)
     if len(args) == 1:
-        print('Please insert one of the following arguements: spells, items, or chars')
+        print('Please insert one of the following arguments: spells, items, or chars')

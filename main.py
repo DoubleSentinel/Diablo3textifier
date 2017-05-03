@@ -42,7 +42,9 @@ if __name__ == '__main__':
     image_paths = sys.argv[2:]
     if sys.argv[1] == 'split':
         split_images(image_paths)
-    if sys.argv[1] == 'contours':
+    elif sys.argv[1] == 'contours':
         detect_contours(image_paths)
+    else:
+        print('Please use one of the following commands before giving arguements:\n- split\n- contours')
     cv2.waitKey(0)
     cv2.destroyAllWindows()

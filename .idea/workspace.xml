@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00dbe48e-2fed-4d7d-ae05-169dd717fb88" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gavageDeDB.py" afterPath="$PROJECT_DIR$/gavageDeDB.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="Diablo3textifier.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,8 +42,8 @@
       <file leaf-file-name="gavageDeDB.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gavageDeDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="82" column="81" selection-start-line="82" selection-start-column="81" selection-end-line="82" selection-end-column="81" />
+            <state relative-caret-position="227">
+              <caret line="83" column="138" selection-start-line="83" selection-start-column="138" selection-end-line="83" selection-end-column="138" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -570,8 +568,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gavageDeDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="82" column="81" selection-start-line="82" selection-start-column="81" selection-end-line="82" selection-end-column="81" />
+        <state relative-caret-position="227">
+          <caret line="83" column="138" selection-start-line="83" selection-start-column="138" selection-end-line="83" selection-end-column="138" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

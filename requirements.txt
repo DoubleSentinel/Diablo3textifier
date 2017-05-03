@@ -1,4 +1,6 @@
 appdirs==1.4.3
+beautifulsoup4==4.5.3
+bs4==0.0.1
 numpy==1.12.1
 opencv-python==3.2.0.6
 packaging==16.8

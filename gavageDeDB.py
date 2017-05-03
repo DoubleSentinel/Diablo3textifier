@@ -81,6 +81,7 @@ if __name__ == '__main__':
     if 'items' in args:
         if len(args) == 2:
             print("Please give one of the following rarities: common, legendary")
+            print("However, for common items, we don't guarantee the image treatment algorithm will differentiate items with the same icon")
         else:
             if "common" in args:
                 for item in items:

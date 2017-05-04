@@ -6,8 +6,11 @@ import sys
 from bs4 import BeautifulSoup
 
 
-def download_item_icon(link, directory, sex, character, name):
-    filename = name + '_' + character + '_' + sex + '.png'
+def download_item_icon(link, directory, sex, character, name=''):
+    if name == '':
+        filename = character + '_' + sex + '.png'
+    else:
+        filename = name + '_' + character + '_' + sex + '.png'
     print('checking: ' + filename)
     if os.path.isfile(directory + filename):
         print('\tfile exists, skipping')
@@ -21,10 +24,12 @@ def download_item_icon(link, directory, sex, character, name):
             urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + filename)
         print(filename + ' downloaded!')
     except urllib.error.URLError:
-        print('remote file doesn\'t exist, skipping')
+        print('\tremote file doesn\'t exist, skipping')
         pass
+    except KeyboardInterrupt:
+        exit(0)
     except:
-        print('download failed, skipping')
+        print('\tdownload failed, skipping')
         pass
 
 
@@ -32,15 +37,15 @@ def download_spell_icon(link, directory):
     filename = link.split('/')[-1]
     if 'male' not in filename:
         if os.path.isfile(directory + filename):
-            print('\tfile exists, skipping')
+            print('\tfile exists, skipping\n')
             return
         try:
             print('downloading...')
             print(link)
             urllib.request.urlretrieve(link, directory + filename)
-            print(filename + ' downloaded!')
+            print('\t' + filename + ' downloaded!\n')
         except urllib.error.URLError:
-            print('remote file doesn\'t exist, skipping')
+            print('\tremote file doesn\'t exist, skipping\n')
 
 
 def get_item_links(source, item, rarity, download=False):
@@ -81,18 +86,24 @@ if __name__ == '__main__':
     if 'items' in args:
         if len(args) == 2:
             print("Please give one of the following rarities: common, legendary")
-            print("However, for common items, we don't guarantee the image treatment algorithm will differentiate items with the same icon")
+            print(
+                "However, for common items, we don't guarantee the image treatment algorithm will differentiate items with the same icon")
         else:
             if "common" in args:
                 for item in items:
                     get_item_links(urllib.request.urlopen(
                         'https://us.battle.net/d3/en/item/' + item + '/').read().decode('utf-8'), item, "common",
                                    True)
+                print('\nItems icons download finished!')
             elif "legendary" in args:
                 for item in items:
                     get_item_links(urllib.request.urlopen(
                         'https://us.battle.net/d3/en/item/' + item + '/').read().decode('utf-8'), item, "legendary",
                                    True)
+                    get_item_links(urllib.request.urlopen(
+                        'https://us.battle.net/d3/en/item/' + item + '/').read().decode('utf-8'), item, "set",
+                                   True)
+                print('\nItems icons download finished!')
     if 'chars' in args:
         for char in characters:
             dir = os.getcwd() + '\\database\\characters\\'
@@ -102,6 +113,7 @@ if __name__ == '__main__':
                                dir, 'male', char)
             download_item_icon('https://blzmedia-a.akamaihd.net/d3/icons/portraits/42/demonhunter_male.png',
                                dir, 'female', char)
+            print('\nCharacter icons download finished!')
     if 'spells' in args:
         for char in characters:
             if char == 'demonhunter':
@@ -112,5 +124,6 @@ if __name__ == '__main__':
                 'https://us.battle.net/d3/en/class/' + char + '/active/').read().decode('utf-8'), char, True)
             get_class_links(urllib.request.urlopen(
                 'https://us.battle.net/d3/en/class/' + char + '/passive/').read().decode('utf-8'), char, True)
+            print('\nSpells icons download finished!')
     if len(args) == 1:
         print('Please insert one of the following arguments: spells, items, or chars')

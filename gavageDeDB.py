@@ -18,18 +18,23 @@ def download_item_icon(link, directory, sex, character, name=''):
     try:
         print('downloading...')
         if character == 'crusader':
-            urllib.request.urlretrieve(link.replace('demonhunter_male', 'x1_' + character + '_' + sex),
+            try:
+                urllib.request.urlretrieve(link.replace('demonhunter_male', 'x1_' + character + '_' + sex),
                                        directory + filename)
+                return
+            except urllib.error.URLError:
+                urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex),
+                                           directory + filename)
         else:
             urllib.request.urlretrieve(link.replace('demonhunter_male', character + '_' + sex), directory + filename)
-        print(filename + ' downloaded!')
+        print('\t'+filename + ' downloaded!\n')
     except urllib.error.URLError:
-        print('\tremote file doesn\'t exist, skipping')
+        print('\tremote file doesn\'t exist, skipping\n')
         pass
     except KeyboardInterrupt:
         exit(0)
     except:
-        print('\tdownload failed, skipping')
+        print('\tdownload failed, skipping\n')
         pass
 
 
@@ -53,20 +58,22 @@ def get_item_links(source, item, rarity, download=False):
     for tr in soup.find_all('tr', rarity):
         link = re.findall('url\((.*?)\)', str(tr.find_all('span', style=re.compile("background-image: "))[0]))[0]
         name = tr.find_all('a')[1].string
-        # print("name: "+name+" download link: "+link)
         if download:
-            directory = os.getcwd() + '\\database\\' + item + '\\'
+            directory = os.getcwd() + '\\database\\items\\' + item + '\\'
             if not os.path.exists(directory):
                 os.makedirs(directory)
             for character in characters:
                 download_item_icon(link, directory, 'male', character, name)
                 download_item_icon(link, directory, 'female', character, name)
+        else:
+            print('name: '+name)
+            print('\tlink: '+link)
 
 
 def get_class_links(source, character, download=False):
     for link in re.findall('[\bhttps://blzmedia\-a.akamaihd.net/d3/icons/skills/64/\b]+[a-z_0-9]*_[a-z]*.png', source):
         if download:
-            dir = os.getcwd() + '\\database\\characters\\' + character + '-spells\\'
+            dir = os.getcwd() + '\\database\\spells\\' + character + '\\'
             if not os.path.exists(dir):
                 os.makedirs(dir)
             download_spell_icon(link, dir)
@@ -113,7 +120,7 @@ if __name__ == '__main__':
                                dir, 'male', char)
             download_item_icon('https://blzmedia-a.akamaihd.net/d3/icons/portraits/42/demonhunter_male.png',
                                dir, 'female', char)
-            print('\nCharacter icons download finished!')
+        print('\nCharacter icons download finished!')
     if 'spells' in args:
         for char in characters:
             if char == 'demonhunter':
@@ -124,6 +131,6 @@ if __name__ == '__main__':
                 'https://us.battle.net/d3/en/class/' + char + '/active/').read().decode('utf-8'), char, True)
             get_class_links(urllib.request.urlopen(
                 'https://us.battle.net/d3/en/class/' + char + '/passive/').read().decode('utf-8'), char, True)
-            print('\nSpells icons download finished!')
+        print('\nSpells icons download finished!')
     if len(args) == 1:
         print('Please insert one of the following arguments: spells, items, or chars')

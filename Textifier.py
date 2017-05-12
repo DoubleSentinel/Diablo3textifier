@@ -11,7 +11,7 @@ roi = image[220:850, 590:1300]
 gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
 
 for imagePath in glob.glob("database/classes/*.png"):
-
+	print("Identify class")
 	template = cv2.imread(imagePath)
 	template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 	template = cv2.Canny(template, 50, 200)
@@ -37,13 +37,12 @@ for imagePath in glob.glob("database/classes/*.png"):
 				
 spells = set()			
 for imagePath in glob.glob("database/spells/"+classeName+"/*.png"):
-
+	print("matching a skill template")
 	template = cv2.imread(imagePath)
 	template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 	template = cv2.Canny(template, 50, 200)
 	(tH, tW) = template.shape[:2]
 	found = None
-	
 
 	for scale in np.linspace(1.0, 2.0, 20)[::-1]:
 
@@ -56,7 +55,7 @@ for imagePath in glob.glob("database/spells/"+classeName+"/*.png"):
 
 		if found is None or maxVal > found[0]:
 			found = (maxVal, maxLoc, r)
-			if maxLoc[1] > 440 and maxLoc[1] < 490:
+			if maxLoc[1] > 440 and maxLoc[1] < 460:
 				if "passive" not in imagePath:
 					x,y,spellsPath = imagePath.split('/')
 					a,b = spellsPath.split('_')
@@ -68,8 +67,6 @@ for imagePath in glob.glob("database/spells/"+classeName+"/*.png"):
 					spell, trash = c.split('.')
 					spells.add(spell)
 	
-	print(imagePath)
-	print(maxVal)
 #faire pour les items
 
 with open("Character.txt", 'w', encoding='latin1') as output:
